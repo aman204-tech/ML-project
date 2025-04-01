@@ -1,0 +1,10 @@
+torch
+torchvision
+opencv-python
+numpy
+tqdm
+pyyaml
+gdown
+jiwer
+matplotlib
+seaborn
