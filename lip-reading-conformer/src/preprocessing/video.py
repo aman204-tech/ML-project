@@ -8,7 +8,7 @@ class VideoPreprocessor:
                  face_cascade_path: str = 'haarcascade_frontalface_default.xml',
                  mouth_cascade_path: str = 'haarcascade_mcs_mouth.xml',
                  target_frames: int = 29,
-                 target_size: Tuple[int, int] = (88, 88)):
+                 target_size: Tuple[int, int] = (128, 128)):
         """Initialize video preprocessor with cascade classifiers."""
         self.face_cascade = cv2.CascadeClassifier(face_cascade_path)
         self.mouth_cascade = cv2.CascadeClassifier(mouth_cascade_path)
@@ -28,7 +28,7 @@ class VideoPreprocessor:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         gray = cv2.equalizeHist(gray)
 
-        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3)
 
         if len(faces) == 0:
             print("No faces detected.")
@@ -40,7 +40,7 @@ class VideoPreprocessor:
         mouth_roi_y_start = int(y + 0.6 * h)
         mouth_roi = gray[mouth_roi_y_start: y + h, x: x + w]
 
-        mouths = self.mouth_cascade.detectMultiScale(mouth_roi, scaleFactor=1.1, minNeighbors=5)
+        mouths = self.mouth_cascade.detectMultiScale(mouth_roi, scaleFactor=1.1, minNeighbors=3)
 
         if len(mouths) == 0:
             print("No mouth detected.")
@@ -52,7 +52,7 @@ class VideoPreprocessor:
             absolute_y = mouth_roi_y_start + my
             if absolute_y > best_y:
                 best_y = absolute_y
-                best_candidate = (mx, my, mw, mh)
+                best_candidate = (x + mx, mouth_roi_y_start + my, mw, mh)
 
         return image, best_candidate
 
