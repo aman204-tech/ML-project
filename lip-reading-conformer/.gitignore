@@ -16,3 +16,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
+
+#notebooks
+*.ipynb
