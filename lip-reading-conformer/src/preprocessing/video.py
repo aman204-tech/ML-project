@@ -121,7 +121,10 @@ class VideoPreprocessor:
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
 
-        for video_path in input_path.rglob('*.mpg'):
+        # Gather both .mpg and .mp4 files
+        video_files = list(input_path.rglob('*.mpg')) + list(input_path.rglob('*.mp4'))
+        
+        for video_path in video_files:
             # Create output directory structure
             relative_path = video_path.relative_to(input_path)
             output_video_dir = output_path / relative_path.parent / video_path.stem
